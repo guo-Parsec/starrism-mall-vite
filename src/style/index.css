@@ -1,0 +1,52 @@
+.main-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f6fbff;
+}
+
+.main-background {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background: url("../assets/bg-login.svg") no-repeat center center;
+    /*background-size: cover;*/
+    /*z-index: -1;*/
+}
+
+.login-container {
+    width: 40%;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.login-card {
+    width: 60%;
+}
+
+.login-btn {
+    height: 100%;
+    width: 100%;
+}
+
+.title-img {
+    height: 100%;
+    text-align: center;
+    margin-top: -10px;
+}
+
+.title-text {
+    height: 100%;
+    text-align: center;
+    font-family: "Consolas", serif;
+    line-height: 0.4;
+    letter-spacing: 0.048em;
+    font-weight: 600;
+    font-style: italic;
+    font-size: 2.2rem;
+}
