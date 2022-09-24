@@ -1,11 +1,11 @@
 <template>
-    <div class="main-container">
+    <div class="flex-main-container">
         <div class="main-background"/>
         <div class="login-container">
             <el-card shadow="hover" class="login-card">
                 <template #header>
                     <div class="title-img">
-                        <img alt="starrism" style="width: 25%" src="public/icon.svg">
+                        <img alt="starrism" style="width: 25%" src="/public/icon.svg">
                     </div>
                     <div class="title-text">
                         <span>Starrism</span>
@@ -30,6 +30,9 @@
 import { reactive, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import useStore from '@/store';
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const store = useStore();
 
@@ -54,6 +57,7 @@ function login(formEl: FormInstance | undefined) {
     formEl.validate(valid => {
         if (valid) {
             store.auth.login(loginData);
+            router.push("/layout")
         }
     });
 }

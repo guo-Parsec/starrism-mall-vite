@@ -11,6 +11,11 @@ const useAuthStore = defineStore(storePool.authStoreId, {
             tokenName: ''
         };
     },
+    getters: {
+        nickname(): string {
+            return this.coreUser.nickname ? this.coreUser.username : this.coreUser.nickname;
+        }
+    },
     actions: {
         login(dto: auth.UserLoginDto) {
             authApi.login(dto).then(__ => {
@@ -20,6 +25,9 @@ const useAuthStore = defineStore(storePool.authStoreId, {
                     state.accessToken = __.accessToken.accessToken;
                 });
             });
+        },
+        logout() {
+            authApi.logout(this.coreUser.id)
         }
     }
 });
