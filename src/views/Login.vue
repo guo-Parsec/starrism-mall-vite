@@ -57,7 +57,6 @@ function login(formEl: FormInstance | undefined) {
     formEl.validate(valid => {
         if (valid) {
             store.auth.login(loginData);
-            router.push("/layout")
         }
     });
 }

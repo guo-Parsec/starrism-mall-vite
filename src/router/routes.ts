@@ -16,6 +16,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/Layout.vue'),
         children: [
             {
+                path: '/workbench',
+                name: 'workbench',
+                component: () => import('@/views/Workbench.vue'),
+            },
+            {
                 path: '/bms/user',
                 name: 'user',
                 component: () => import('@/views/bms/User.vue'),
@@ -30,3 +35,5 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 export default routes;
+
+export const whiteList: Array<string> = ['/', '/login'];

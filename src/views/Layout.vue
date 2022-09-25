@@ -1,27 +1,19 @@
 <template>
     <el-container class="main-container layout">
         <el-header height="80px" class="header">
-            <head-menu></head-menu>
+            <head-menu/>
         </el-header>
-        <el-container class="content">
-            <el-aside class="aside">
-            </el-aside>
-            <el-main class="main">
-                <router-view v-slot="{ Component }">
-                    <transition name="fade" mode="out-in">
-                        <component :is="Component"/>
-                    </transition>
-                </router-view>
-            </el-main>
-        </el-container>
+        <el-main class="main">
+            <main-page/>
+
+        </el-main>
     </el-container>
 </template>
 
 <script setup lang="ts">
 import HeadMenu from '@/components/layout/HeadMenu.vue';
-import { ref } from 'vue';
+import MainPage from '@/components/layout/MainPage.vue';
 
-const activeIndex = ref('1');
 </script>
 
 <style scoped>
@@ -51,7 +43,7 @@ const activeIndex = ref('1');
 
 .main {
     background-color: #ffffff;
-    margin-left: 10px;
+    margin: 10px;
     height: 100%;
     border-radius: 15px;
 }
