@@ -57,8 +57,7 @@ import { reactive, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { UserFilled, User, SwitchButton } from '@element-plus/icons-vue';
 import useStore from '@/store';
-import { useRouter, useRoute } from 'vue-router';
-import layoutStore from '@/store/modules/layoutStore';
+import { useRouter } from 'vue-router';
 
 const store = useStore();
 const router = useRouter();
@@ -84,6 +83,11 @@ const menus = reactive<Array<layout.MenuOption>>([
             {
                 label: '角色管理',
                 index: '/bms/role',
+                isLeaf: true
+            },
+            {
+                label: '参数管理',
+                index: '/bms/param',
                 isLeaf: true
             },
         ]

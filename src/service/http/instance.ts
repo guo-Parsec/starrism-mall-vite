@@ -1,11 +1,13 @@
 import axios from 'axios';
 import type { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import useStore from '@/store';
 
 export default class HttpInstance {
     instance: AxiosInstance;
 
     constructor(axiosConfig: AxiosRequestConfig) {
         this.instance = axios.create(axiosConfig);
+        this.setInterceptor()
     }
 
     /** 设置请求拦截器 */
@@ -16,9 +18,11 @@ export default class HttpInstance {
                 if (handleConfig.headers) {
                     // 数据转换
                     const contentType = handleConfig.headers['Content-Type'] as string;
-                    //todo handleConfig.data = await transformRequestData(handleConfig.data, contentType);
+                    const store = useStore()
                     // 设置token
-                    // todo handleConfig.headers.Authorization = getToken();
+                    if (store.auth.isLogin) {
+                        handleConfig.headers[store.auth.tokenName] = "Bearer " + store.auth.accessToken;
+                    }
                 }
                 return handleConfig;
             },
@@ -29,13 +33,11 @@ export default class HttpInstance {
         this.instance.interceptors.response.use(
             response => {
                 const { status } = response;
-                console.log('1111',response);
                 if (status === 200 || status < 300 || status === 304) {
                     const dataResult = response.data;
-                    console.log('222',dataResult);
                     if (dataResult['code'] === 200) {
                         // 请求成功处理
-                        return response.data
+                        return response
                     }
                 }
                 return response;

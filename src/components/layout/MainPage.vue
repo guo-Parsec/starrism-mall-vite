@@ -7,13 +7,15 @@
                              :label="pane.label">
                     <template #label>
                         <el-dropdown trigger="contextmenu" :id="pane.name" ref="dropdownRef" size="small"
-                                     @visible-change="handleChange($event, pane.name)">
+                                     @visible-change="handleChange($event, pane.name)"
+                                     :disabled="tabPanes.length === 1">
                             <span :class="activeTabName === pane.name ? 'label' : ''">{{ pane.label }}</span>
                             <template #dropdown>
-                                <el-dropdown-menu>
+                                <el-dropdown-menu v-show="tabPanes.length > 1">
                                     <template v-for="(context,contextIndex) in tabContextMenu" :key="contextIndex">
                                         <el-dropdown-item class="tab-context-menu"
-                                                          v-if="showContext(index, context.command)">
+                                                          @click="doContextCommand(pane.name, context.command)"
+                                                          v-if="showContext(pane.name, context.command)">
                                             <el-icon v-if="context.icon !== undefined">
                                                 <component :is="context.icon"/>
                                             </el-icon>
@@ -24,7 +26,7 @@
                             </template>
                         </el-dropdown>
                     </template>
-                    <router-view/>
+                    <router-view v-if="pane.name===activeTabName"/>
                 </el-tab-pane>
             </template>
         </el-tabs>
@@ -37,7 +39,6 @@ import { useRouter } from 'vue-router';
 import useStore from '@/store';
 import { storeToRefs } from 'pinia';
 import { TabsPaneContext } from 'element-plus';
-import { layout } from '@/types/layout';
 
 const router = useRouter();
 
@@ -86,15 +87,58 @@ const tabContextMenu: Array<layout.ContextMenuOption> = reactive([
     },
     {
         label: '关闭所有标签页',
-        command: 'current',
+        command: 'all',
         icon: 'Menu'
     }
-
 ]);
 
-function showContext(index: string, type: string) {
-    console.log(index,type )
-    return true;
+function showContext(name: string, type: string) {
+    let index = tabPanes.value.findIndex(item => item.name === name);
+    if (type === 'left' && index === 1) {
+        return false;
+    }
+    if (name === '/workbench' && (type === 'current')) {
+        return false;
+    }
+    return !(type === 'right' && index === (tabPanes.value.length - 1));
+}
+
+function doContextCommand(name: string, type: string) {
+    if (type === 'all') {
+        store.layout.closeAll();
+        return;
+    }
+    if (type === 'current') {
+        store.layout.closeTabPane(name);
+        return;
+    }
+    if (type === 'other') {
+        store.layout.closeOther(name);
+        return;
+    }
+    let curIndex = tabPanes.value.findIndex(item => item.name === name);
+    if (type === 'left') {
+        const left: Array<string> = [];
+        tabPanes.value
+            .forEach((element, index) => {
+                if (index < curIndex && element.name !== '/workbench') {
+                    left.push(element.name);
+                }
+            });
+        store.layout.closeMany(left);
+        return;
+    }
+    if (type === 'right') {
+        const right: Array<string> = [];
+        tabPanes.value
+            .forEach((element, index) => {
+                if (index > curIndex && element.name !== '/workbench') {
+                    right.push(element.name);
+                }
+            });
+        store.layout.closeMany(right);
+        return;
+    }
 }
 
 </script>

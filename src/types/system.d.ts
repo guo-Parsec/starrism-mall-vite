@@ -26,4 +26,11 @@ declare namespace Service{
         /** 表示后端消息的属性字段 */
         data: T;
     }
+
+    interface PageData<E> {
+        pageSize: number,
+        currPage: number,
+        total: number,
+        records: Array<E>
+    }
 }

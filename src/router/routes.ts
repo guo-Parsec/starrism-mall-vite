@@ -29,6 +29,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/bms/role',
                 name: 'role',
                 component: () => import('@/views/bms/Role.vue'),
+            },
+            {
+                path: '/bms/param',
+                name: 'param',
+                component: () => import('@/views/bms/Param.vue'),
             }
         ]
     }

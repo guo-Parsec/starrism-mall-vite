@@ -32,7 +32,7 @@ const useLayoutStore = defineStore(storePool.layoutStoreId, {
                 pane.disabled = false;
             }
             this.$patch(state => {
-                state.currActiveRoutePath = pane.name
+                state.currActiveRoutePath = pane.name;
                 if (this.tabPaneNames.includes(pane.name)) {
                     console.warn(`pane [${pane.name}] has existed!`);
                     return;
@@ -48,16 +48,38 @@ const useLayoutStore = defineStore(storePool.layoutStoreId, {
                 }
                 state.tabPanes = state.tabPanes.filter(item => paneName != item.name);
                 if (state.currActiveRoutePath === paneName) {
-                    state.currActiveRoutePath = this.tabPaneNames[this.tabPaneNames.length - 1]
-                    router.push(state.currActiveRoutePath).catch(err => console.error(err))
+                    state.currActiveRoutePath = this.tabPaneNames[this.tabPaneNames.length - 1];
+                    router.push(state.currActiveRoutePath).catch(err => console.error(err));
                 }
             });
         },
-        putActiveRoutePath() {
-            const route = useRoute()
+        closeAll() {
             this.$patch(state => {
-                state.currActiveRoutePath = route.path
-            })
+                state.tabPanes = state.tabPanes.filter(item => item.name === '/workbench');
+                state.currActiveRoutePath = '/workbench';
+                router.push('/workbench').catch(err => console.error(err));
+            });
+        },
+        closeMany(closePaneNames: Array<string>) {
+            this.$patch(state => {
+                state.tabPanes = state.tabPanes.filter(item => !closePaneNames.includes(item.name));
+                state.currActiveRoutePath = this.tabPaneNames[this.tabPaneNames.length - 1];
+                router.push(state.currActiveRoutePath).catch(err => console.error(err));
+            });
+        },
+        closeOther(paneName: string) {
+            const restPaneNames = ['/workbench', paneName];
+            this.$patch(state => {
+                state.tabPanes = state.tabPanes.filter(item => restPaneNames.includes(item.name));
+                state.currActiveRoutePath = this.tabPaneNames[this.tabPaneNames.length - 1];
+                router.push(state.currActiveRoutePath).catch(err => console.error(err));
+            });
+        },
+        putActiveRoutePath() {
+            const route = useRoute();
+            this.$patch(state => {
+                state.currActiveRoutePath = route.path;
+            });
         }
     }
 });

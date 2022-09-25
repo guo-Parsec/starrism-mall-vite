@@ -1,5 +1,3 @@
-import { Component } from 'vue';
-
 declare namespace layout {
     interface TabPanesOption {
         label: string,
